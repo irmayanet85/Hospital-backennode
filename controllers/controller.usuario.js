@@ -87,6 +87,8 @@ const crearUsuario = async (req, res= response)=>{
        ok:true,
        id: dbUser.id,
        name: dbUser.name,
+       email: dbUser.email,
+       rol: dbUser.rol,
        token:token,
        rolEdit:dbUser.rolEdit
       });

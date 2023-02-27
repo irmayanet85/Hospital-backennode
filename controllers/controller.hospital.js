@@ -108,8 +108,7 @@ const listarHospitales = async (req, res= response)=>{
   const [list, total] = await Promise.all([
     Hospital
         .find().populate('usuario', 'name email img rol google')
-        .skip(from)
-        .limit(5),
+        .skip(from),
   
     Hospital.count()
     ]);

@@ -113,7 +113,7 @@ const listarMedico = async (req, res= response)=>{
   const [list, total] = await Promise.all([
     Medico
       .find()
-        .populate('hospitales', 'name img usuario')
+        .populate('hospitales', 'id name')
         .populate('usuario', 'name email img')
       .skip(from)
       .limit(5),
