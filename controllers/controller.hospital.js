@@ -18,9 +18,7 @@ const crearHospital = async (req, res= response)=>{
     return res.status(201).json({
       ok: true,
       msg:'Fue creado',
-      id: HospitalDB.id,
-      name : HospitalDB.name,
-      usuario : HospitalDB.usuario
+      hospital: HospitalDB
   
     }); 
             
@@ -55,7 +53,7 @@ const crearHospital = async (req, res= response)=>{
       else{
         return res.status(404).json({
           ok: false,
-          msg: 'No pudo ser eliminado',
+          msg: 'No se encontro dicho hospital para ser eliminado ',
         });
       } 
       
@@ -76,31 +74,39 @@ const crearHospital = async (req, res= response)=>{
     let id = req.params.id;
 
     console.log (id);
-     
-   let hospital = await Hospital.findById(id);
-   if (hospital){
-     console.log('hospital', hospital);
-     return res.status(201).json({
-       ok: true,
-       hospital : hospital
-     });
-   }
-   else{
-     return res.status(404).json({
-       ok: false,
-       data : {}
-     });
-         
-     
-   }
+    let hospital;
+   try {
+
+      hospital = await Hospital.findById(id);
+    } 
+    catch(error) {
+      return res.status(404).json({
+        ok: false,
+        msg : 'user not found'
+      });
+
+    }
+     if (hospital){
+       console.log('hospital', hospital);
+       return res.status(201).json({
+         ok: true,
+         hospital : hospital
+       });
+     }
+     else{
+       return res.status(404).json({
+         ok: false,
+         data : {}
+       });
+           
+       
+     }
+   
    
 
 };
 const listarHospitales = async (req, res= response)=>{
     
-      
-  // let list = await Hospital.find()
-  //                       .populate('usuario', 'name img');
 
   let from = Number(req.query.from)   || 0;
     //console.log(from);  
@@ -108,7 +114,8 @@ const listarHospitales = async (req, res= response)=>{
   const [list, total] = await Promise.all([
     Hospital
         .find().populate('usuario', 'name email img rol google')
-        .skip(from),
+        .skip(from)
+        .limit(5),
   
     Hospital.count()
     ]);

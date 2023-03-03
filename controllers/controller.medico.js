@@ -84,10 +84,19 @@ else {
 
   const getMedico = async (req, res= response)=>{
     let id = req.params.id;
+    let medico;
+    try{
 
-    console.log (id);
-     
-   let medico = await Medico.findById(id).populate('hospitales', 'name');
+      medico = await Medico.findById(id).populate('hospitales', 'name');
+    } 
+    catch(error) {
+      return res.status(404).json({
+        ok: false,
+        msg : 'doctor not found'
+      });
+
+    }
+   
    if (medico){
      console.log('medico', medico);
      return res.status(201).json({
